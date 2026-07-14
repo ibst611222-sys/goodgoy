@@ -3,19 +3,24 @@
 import { motion } from 'framer-motion'
 import { formatCurrency, formatPercent, formatCompactCurrency } from '@/lib/utils'
 import { useAppStore } from '@/store/use-app-store'
+import { convertCurrency } from '@/lib/exchange-rates'
 import { useMemo } from 'react'
 import { Star } from 'lucide-react'
-import { stocks as globalStocks } from '@/data/mock-data'
 
 export default function WatchlistPage() {
-  const { watchlist, removeFromWatchlist, setSelectedSymbol } = useAppStore()
+  const { watchlist, removeFromWatchlist, setSelectedSymbol, stocks, displayCurrency, exchangeRates } = useAppStore()
 
   const watchlistData = useMemo(() => {
     return watchlist.map(sym => {
-      const stock = globalStocks.find(s => s.symbol === sym)
-      return stock || { symbol: sym, name: '', price: 0, change: 0, changePercent: 0, marketCap: 0, sector: '', industry: '', exchange: '', currency: 'USD' }
+      const stock = stocks.find(s => s.symbol === sym)
+      const base = stock || { symbol: sym, name: '', price: 0, change: 0, changePercent: 0, marketCap: 0, sector: '', industry: '', exchange: '', currency: 'USD' }
+      return {
+        ...base,
+        _price: convertCurrency(base.price, displayCurrency, exchangeRates),
+        _mcap: convertCurrency(base.marketCap, displayCurrency, exchangeRates),
+      }
     })
-  }, [watchlist, globalStocks])
+  }, [watchlist, stocks, displayCurrency, exchangeRates])
 
   return (
     <div className="space-y-4">
@@ -57,7 +62,7 @@ export default function WatchlistPage() {
                 <div className="flex-1 grid grid-cols-4 gap-4 text-[10px] font-mono">
                   <div>
                     <div className="text-white/20">Price</div>
-                    <div className="text-white/80">{formatCurrency(stock.price)}</div>
+                    <div className="text-white/80">{formatCurrency(stock._price, displayCurrency)}</div>
                   </div>
                   <div>
                     <div className="text-white/20">Change</div>
@@ -67,7 +72,7 @@ export default function WatchlistPage() {
                   </div>
                   <div>
                     <div className="text-white/20">Mkt Cap</div>
-                    <div className="text-white/80">{formatCompactCurrency(stock.marketCap)}</div>
+                    <div className="text-white/80">{formatCompactCurrency(stock._mcap, displayCurrency)}</div>
                   </div>
                   <div>
                     <div className="text-white/20">Sector</div>

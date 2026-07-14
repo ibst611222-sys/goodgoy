@@ -7,6 +7,7 @@ import { ChipRadar } from '@/components/dashboard/ChipRadar'
 import { MarketHeatmap } from '@/components/dashboard/MarketHeatmap'
 import { TodaysMovers } from '@/components/dashboard/TodaysMovers'
 import { SignalCard } from '@/components/dashboard/SignalCard'
+import { DataSourceTooltip } from '@/components/ui/DataSourceTooltip'
 
 export default function DashboardPage() {
   const { signals } = useAppStore()
@@ -40,9 +41,14 @@ export default function DashboardPage() {
 
       {/* Signals section header */}
       <div className="flex items-center justify-between animate-in animate-in-delay-3">
-        <div>
+        <div className="flex items-center gap-2">
           <span className="text-sm text-white/60 font-mono">Active Signals</span>
           <span className="text-xs text-white/20 ml-2">— highest edge scores</span>
+          <DataSourceTooltip sources={[
+            { label: 'Stock Prices', source: 'live', detail: 'Real-time quotes from Financial Modeling Prep (FMP) API — prices, change, volume, market cap.' },
+            { label: 'Market Pulse', source: 'partial', detail: 'SPY price is real from FMP. Fear/greed score is estimated. Advancers/decliners are estimates.' },
+            { label: 'Signals', source: 'derived', detail: 'Z-scores, edge scores, and buying intensity calculated from real FMP stock quotes.' },
+          ]} />
         </div>
         <div className="flex gap-2 text-[10px] text-white/30 font-mono">
           <span>Sort: Edge Score</span>

@@ -3,9 +3,10 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { cn, formatCurrency, formatPercent, formatCompactCurrency } from '@/lib/utils'
-import { stocks } from '@/data/mock-data'
 import { useAppStore } from '@/store/use-app-store'
-import { Search, Filter, SlidersHorizontal } from 'lucide-react'
+import { convertCurrency } from '@/lib/exchange-rates'
+import { Search, Filter, SlidersHorizontal, Download } from 'lucide-react'
+import { downloadCSV } from '@/lib/export-csv'
 
 const presets = [
   { id: 'mom', name: 'Strong Momentum', desc: 'Streak ≥ 3 · Z-Score ≥ 2.0 · FINI confirmed' },
@@ -16,7 +17,8 @@ const presets = [
 ]
 
 export default function ScreenerPage() {
-  const { setSelectedSymbol } = useAppStore()
+  const { setSelectedSymbol, stocks, displayCurrency, exchangeRates } = useAppStore()
+  const curSymbol = displayCurrency === 'USD' ? '$' : displayCurrency === 'EUR' ? '€' : displayCurrency === 'GBP' ? '£' : displayCurrency === 'JPY' ? '¥' : '$'
   const [activePreset, setActivePreset] = useState(presets[0].id)
   const [minPrice, setMinPrice] = useState('')
   const [maxPrice, setMaxPrice] = useState('')
@@ -59,7 +61,7 @@ export default function ScreenerPage() {
       <div className="glass rounded-xl p-3 border border-surface-border/50">
         <div className="flex items-center gap-4 flex-wrap">
           <div className="flex items-center gap-2">
-            <span className="text-[10px] text-white/30 font-mono">Price</span>
+            <span className="text-[10px] text-white/30 font-mono">{curSymbol} Price</span>
             <input
               type="text"
               placeholder="Min"
@@ -93,7 +95,15 @@ export default function ScreenerPage() {
             <Search className="w-3 h-3" />
             Run Screener
           </button>
-          <span className="text-[10px] text-white/20 font-mono ml-auto">{filtered.length} results</span>
+          <span className="text-[10px] text-white/20 font-mono">{filtered.length} results</span>
+          <button onClick={() => downloadCSV(
+            filtered.map(s => ({ Symbol: s.symbol, Name: s.name, Price: s.price, Change: s.changePercent + '%', 'Mkt Cap': s.marketCap, Sector: s.sector })),
+            [{ key: 'Symbol', label: 'Symbol' }, { key: 'Name', label: 'Name' }, { key: 'Price', label: 'Price' }, { key: 'Change', label: 'Change' }, { key: 'Mkt Cap', label: 'Market Cap' }, { key: 'Sector', label: 'Sector' }],
+            `screener-${new Date().toISOString().slice(0, 10)}`
+          )} className="flex items-center gap-1 px-2 py-1 rounded text-[9px] font-mono text-white/30 hover:text-neon-cyan transition-colors">
+            <Download className="w-3 h-3" />
+            CSV
+          </button>
         </div>
       </div>
 
@@ -118,7 +128,7 @@ export default function ScreenerPage() {
               <div className="flex-1 grid grid-cols-4 gap-4 text-[10px] font-mono">
                 <div>
                   <div className="text-white/20">Price</div>
-                  <div className="text-white/80">{formatCurrency(stock.price)}</div>
+                  <div className="text-white/80">{formatCurrency(convertCurrency(stock.price, displayCurrency, exchangeRates), displayCurrency)}</div>
                 </div>
                 <div>
                   <div className="text-white/20">Change</div>
@@ -128,7 +138,7 @@ export default function ScreenerPage() {
                 </div>
                 <div>
                   <div className="text-white/20">Mkt Cap</div>
-                  <div className="text-white/80">{formatCompactCurrency(stock.marketCap)}</div>
+                  <div className="text-white/80">{formatCompactCurrency(convertCurrency(stock.marketCap, displayCurrency, exchangeRates), displayCurrency)}</div>
                 </div>
                 <div>
                   <div className="text-white/20">Sector</div>

@@ -2,36 +2,50 @@
 
 import { cn } from '@/lib/utils'
 import { useAppStore } from '@/store/use-app-store'
+import { useRouter, usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  LayoutDashboard, Activity, Building2, Globe2, Eye,
+  LayoutDashboard, Activity, Building2, Eye,
   Search, Newspaper, Calendar, LayoutGrid, Workflow,
   LineChart, BarChart3, Star, Bell, Shield,
-  TrendingUp, Menu, X, ChevronLeft, Network, BrainCircuit
+  TrendingUp, ChevronLeft, Network, BrainCircuit,
+  DollarSign, Users, FileText, BookOpen, Database, Timer
 } from 'lucide-react'
 
 const navItems = [
-  { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { id: 'signals', label: 'Signals', icon: Activity },
-  { id: 'flow', label: 'Flow', icon: TrendingUp },
-  { id: 'institutional', label: 'Institutional', icon: Building2, sub: ['Smart Money', 'Top Buyers', 'Rotation Matrix'] },
-  { id: 'darkpool', label: 'Dark Pool', icon: Shield },
-  { id: 'insider', label: 'Insider Tracker', icon: Eye },
-  { id: 'high-activity', label: 'High-Activity', icon: BrainCircuit },
-  { id: 'screener', label: 'Screener', icon: Search },
-  { id: 'news', label: 'News', icon: Newspaper },
-  { id: 'earnings', label: 'Earnings', icon: Calendar },
-  { id: 'themes', label: 'Themes', icon: LayoutGrid },
-  { id: 'backtest', label: 'Backtest', icon: BarChart3 },
-  { id: 'performance', label: 'Performance', icon: LineChart },
-  { id: 'portfolio', label: 'Portfolio', icon: Workflow },
-  { id: 'watchlist', label: 'Watchlist', icon: Star },
-  { id: 'alerts', label: 'Alerts', icon: Bell },
-  { id: 'supplychain', label: 'Supply Chain', icon: Network },
+  { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, route: '/dashboard' },
+  { id: 'signals', label: 'Signals', icon: Activity, route: '/dashboard/signals' },
+  { id: 'timeline', label: 'Signal Timeline', icon: Timer, route: '/dashboard/timeline' },
+  { id: 'flow', label: 'Flow', icon: TrendingUp, route: '/dashboard/flow' },
+  { id: 'institutional', label: 'Institutional', icon: Building2, route: '/dashboard/institutional' },
+  { id: '13f', label: '13F Holdings', icon: Database, route: '/dashboard/13f' },
+  { id: 'darkpool', label: 'Dark Pool', icon: Shield, route: '/dashboard/darkpool' },
+  { id: 'insider', label: 'Insider Tracker', icon: Eye, route: '/dashboard/insider' },
+  { id: 'high-activity', label: 'High-Activity', icon: BrainCircuit, route: '/dashboard/high-activity' },
+  { id: 'screener', label: 'Screener', icon: Search, route: '/dashboard/screener' },
+  { id: 'news', label: 'News', icon: Newspaper, route: '/dashboard/news' },
+  { id: 'earnings', label: 'Earnings', icon: Calendar, route: '/dashboard/earnings' },
+  { id: 'themes', label: 'Themes', icon: LayoutGrid, route: '/dashboard/themes' },
+  { id: 'backtest', label: 'Backtest', icon: BarChart3, route: '/dashboard/backtest' },
+  { id: 'performance', label: 'Performance', icon: LineChart, route: '/dashboard/performance' },
+  { id: 'portfolio', label: 'Portfolio', icon: Workflow, route: '/dashboard/portfolio' },
+  { id: 'watchlist', label: 'Watchlist', icon: Star, route: '/dashboard/watchlist' },
+  { id: 'alerts', label: 'Alerts', icon: Bell, route: '/dashboard/alerts' },
+  { id: 'supplychain', label: 'Supply Chain', icon: Network, route: '/dashboard/supplychain' },
+  { id: 'financials', label: 'Financials', icon: DollarSign, route: '/dashboard/financials' },
+  { id: 'executives', label: 'Executives', icon: Users, route: '/dashboard/executives' },
+  { id: 'filings', label: 'SEC Filings', icon: FileText, route: '/dashboard/filings' },
 ]
 
 export function Sidebar() {
-  const { activeTab, setActiveTab, sidebarOpen, toggleSidebar } = useAppStore()
+  const { sidebarOpen, toggleSidebar } = useAppStore()
+  const router = useRouter()
+  const pathname = usePathname()
+
+  // Derive active tab from current pathname
+  const activeTab = pathname === '/dashboard'
+    ? 'dashboard'
+    : pathname.replace(/\/$/, '').split('/').pop() || 'dashboard'
 
   return (
     <>
@@ -104,7 +118,11 @@ export function Sidebar() {
           {navItems.map((item) => (
             <div key={item.id}>
               <button
-                onClick={() => setActiveTab(item.id)}
+                onClick={() => {
+                  router.push(item.route)
+                  // Close sidebar on mobile after navigation
+                  if (window.innerWidth < 1024) toggleSidebar()
+                }}
                 className={cn(
                   'w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all duration-200 group relative overflow-hidden',
                   activeTab === item.id

@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { cn, formatPercent, formatCurrency, formatLargeNumber } from '@/lib/utils'
 import { useAppStore } from '@/store/use-app-store'
+import { convertCurrency } from '@/lib/exchange-rates'
 import { Signal } from '@/data/types'
 import { Star, Bell, ChevronDown, ChevronUp, Info } from 'lucide-react'
 
@@ -13,7 +14,10 @@ interface SignalCardProps {
 }
 
 export function SignalCard({ signal, view = 'card' }: SignalCardProps) {
-  const { addToWatchlist, removeFromWatchlist, isInWatchlist, setSelectedSymbol } = useAppStore()
+  const { addToWatchlist, removeFromWatchlist, isInWatchlist, setSelectedSymbol, displayCurrency, exchangeRates } = useAppStore()
+
+  // Convert price to user's selected currency
+  const convertedPrice = convertCurrency(signal.price, displayCurrency, exchangeRates)
   const watching = isInWatchlist(signal.symbol)
   const [showTooltip, setShowTooltip] = useState(false)
 
@@ -36,7 +40,7 @@ export function SignalCard({ signal, view = 'card' }: SignalCardProps) {
           <span className="text-xs text-white/60">{signal.name}</span>
         </td>
         <td className="py-2.5 px-3">
-          <span className="font-mono text-sm">{formatCurrency(signal.price)}</span>
+          <span className="font-mono text-sm">{formatCurrency(convertedPrice, displayCurrency)}</span>
         </td>
         <td className="py-2.5 px-3">
           <span className={`font-mono text-xs ${signal.changePercent >= 0 ? 'text-neon-green' : 'text-neon-pink'}`}>
@@ -88,7 +92,7 @@ export function SignalCard({ signal, view = 'card' }: SignalCardProps) {
           <div className="text-[10px] text-white/30 mt-0.5">{signal.name}</div>
         </div>
         <div className="text-right">
-          <div className="font-mono text-sm font-medium text-white">{formatCurrency(signal.price)}</div>
+          <div className="font-mono text-sm font-medium text-white">{formatCurrency(convertedPrice, displayCurrency)}</div>
           <div className={cn('font-mono text-xs', signal.changePercent >= 0 ? 'text-neon-green' : 'text-neon-pink')}>
             {formatPercent(signal.changePercent)}
           </div>

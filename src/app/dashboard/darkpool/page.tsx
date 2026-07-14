@@ -3,10 +3,11 @@
 import { motion } from 'framer-motion'
 import { formatCurrency, formatCompactCurrency, formatLargeNumber } from '@/lib/utils'
 import { useAppStore } from '@/store/use-app-store'
+import { convertCurrency } from '@/lib/exchange-rates'
 import { Shield } from 'lucide-react'
 
 export default function DarkPoolPage() {
-  const { blockTrades } = useAppStore()
+  const { blockTrades, displayCurrency, exchangeRates } = useAppStore()
 
   return (
     <div className="space-y-4">
@@ -42,7 +43,7 @@ export default function DarkPoolPage() {
               <div className="flex-1 grid grid-cols-4 gap-4 text-[10px] font-mono ml-4">
                 <div>
                   <div className="text-white/20">Price</div>
-                  <div className="text-white/80">{formatCurrency(trade.price)}</div>
+                  <div className="text-white/80">{formatCurrency(convertCurrency(trade.price, displayCurrency, exchangeRates), displayCurrency)}</div>
                 </div>
                 <div>
                   <div className="text-white/20">Shares</div>
@@ -50,7 +51,7 @@ export default function DarkPoolPage() {
                 </div>
                 <div>
                   <div className="text-white/20">Total</div>
-                  <div className="text-white/80">{formatCompactCurrency(trade.totalValue)}</div>
+                  <div className="text-white/80">{formatCompactCurrency(convertCurrency(trade.totalValue, displayCurrency, exchangeRates), displayCurrency)}</div>
                 </div>
                 <div>
                   <div className="text-white/20">Z-Score</div>

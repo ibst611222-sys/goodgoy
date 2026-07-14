@@ -3,10 +3,11 @@
 import { motion } from 'framer-motion'
 import { cn, formatCompactCurrency } from '@/lib/utils'
 import { useAppStore } from '@/store/use-app-store'
+import { convertCurrency } from '@/lib/exchange-rates'
 import { TrendingUp, TrendingDown } from 'lucide-react'
 
 export default function InstitutionalPage() {
-  const { institutionalFlows, sectorFlows } = useAppStore()
+  const { institutionalFlows, sectorFlows, displayCurrency, exchangeRates } = useAppStore()
 
   return (
     <div className="space-y-4">
@@ -36,12 +37,12 @@ export default function InstitutionalPage() {
                 <div className="flex-1 grid grid-cols-3 gap-2 text-[10px] font-mono">
                   <div>
                     <div className="text-white/20">FINI</div>
-                    <div className="text-neon-green">+{formatCompactCurrency(flow.finiNet)}</div>
+                    <div className="text-neon-green">+{formatCompactCurrency(convertCurrency(flow.finiNet, displayCurrency, exchangeRates), displayCurrency)}</div>
                   </div>
                   <div>
                     <div className="text-white/20">Trust</div>
                     <div className={flow.trustNet >= 0 ? 'text-neon-green' : 'text-neon-pink'}>
-                      {flow.trustNet >= 0 ? '+' : ''}{formatCompactCurrency(flow.trustNet)}
+                      {flow.trustNet >= 0 ? '+' : ''}{formatCompactCurrency(convertCurrency(flow.trustNet, displayCurrency, exchangeRates), displayCurrency)}
                     </div>
                   </div>
                   <div>

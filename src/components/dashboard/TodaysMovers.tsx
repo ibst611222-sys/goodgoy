@@ -4,14 +4,21 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { cn, formatCurrency, formatPercent } from '@/lib/utils'
 import { useAppStore } from '@/store/use-app-store'
-import { stocks } from '@/data/mock-data'
+import { convertCurrency, getCurrencySymbol } from '@/lib/exchange-rates'
+import { DataSourceTooltip } from '@/components/ui/DataSourceTooltip'
 
 export function TodaysMovers() {
   const [filterAbove50, setFilterAbove50] = useState(false)
   const [expanded, setExpanded] = useState(false)
-  const { setSelectedSymbol } = useAppStore()
+  const { stocks, displayCurrency, exchangeRates, setSelectedSymbol } = useAppStore()
 
-  const sorted = [...stocks].sort((a, b) => Math.abs(b.changePercent) - Math.abs(a.changePercent))
+  // Convert prices once for performance
+  const withConvertedPrices = stocks.map(s => ({
+    ...s,
+    _price: convertCurrency(s.price, displayCurrency, exchangeRates),
+  }))
+
+  const sorted = [...withConvertedPrices].sort((a, b) => Math.abs(b.changePercent) - Math.abs(a.changePercent))
   const filtered = filterAbove50 ? sorted.filter(s => s.price >= 50) : sorted
   const display = expanded ? filtered : filtered.slice(0, 6)
 
@@ -23,6 +30,9 @@ export function TodaysMovers() {
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <span className="text-xs text-white/40 font-mono">Today's Movers</span>
+          <DataSourceTooltip sources={[
+            { label: 'Stock Prices', source: 'live', detail: 'Real-time quotes from Financial Modeling Prep (FMP) API — prices, change, volume, market cap.' },
+          ]} />
         </div>
         <button
           onClick={() => setFilterAbove50(!filterAbove50)}
@@ -33,7 +43,7 @@ export function TodaysMovers() {
               : 'text-white/30 border-white/10 hover:border-white/20'
           )}
         >
-          {filterAbove50 ? 'All Stocks' : 'Above NT$50'}
+          {filterAbove50 ? 'All Stocks' : `Above ${getCurrencySymbol(displayCurrency)}50`}
         </button>
       </div>
 
@@ -56,7 +66,7 @@ export function TodaysMovers() {
                   <span className="text-[10px] text-white/30">{stock.name.slice(0, 15)}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="font-mono text-[10px] text-white/50">{formatCurrency(stock.price)}</span>
+                  <span className="font-mono text-[10px] text-white/50">{formatCurrency(stock._price, displayCurrency)}</span>
                   <span className="font-mono text-[10px] text-neon-green">{formatPercent(stock.changePercent)}</span>
                 </div>
               </motion.div>
@@ -82,7 +92,7 @@ export function TodaysMovers() {
                   <span className="text-[10px] text-white/30">{stock.name.slice(0, 15)}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="font-mono text-[10px] text-white/50">{formatCurrency(stock.price)}</span>
+                  <span className="font-mono text-[10px] text-white/50">{formatCurrency(stock._price, displayCurrency)}</span>
                   <span className="font-mono text-[10px] text-neon-pink">{formatPercent(stock.changePercent)}</span>
                 </div>
               </motion.div>

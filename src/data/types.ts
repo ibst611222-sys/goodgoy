@@ -175,7 +175,7 @@ export interface MacroTheme {
 export interface NewsItem {
   id: string
   title: string
-  source: 'cnyes' | 'mops' | 'reuters' | 'bloomberg'
+  source: 'cnyes' | 'mops' | 'reuters' | 'bloomberg' | 'yahoo' | 'cnbc'
   url: string
   date: string
   symbols: string[]

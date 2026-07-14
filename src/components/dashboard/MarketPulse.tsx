@@ -2,10 +2,13 @@
 
 import { useAppStore } from '@/store/use-app-store'
 import { formatCompactCurrency, formatPercent } from '@/lib/utils'
+import { convertCurrency } from '@/lib/exchange-rates'
+import { DataSourceTooltip } from '@/components/ui/DataSourceTooltip'
 import { TrendingUp, TrendingDown, Activity, BarChart3, RefreshCw } from 'lucide-react'
 
 export function MarketPulse() {
-  const { marketPulse, refreshData, lastRefresh } = useAppStore()
+  const { marketPulse, refreshData, lastRefresh, displayCurrency, exchangeRates } = useAppStore()
+  const convertedFini = convertCurrency(marketPulse.finiNetFlow, displayCurrency, exchangeRates)
 
   const items = [
     {
@@ -24,7 +27,7 @@ export function MarketPulse() {
     },
     {
       label: 'Institutional Flow',
-      value: formatCompactCurrency(marketPulse.finiNetFlow),
+      value: formatCompactCurrency(convertedFini, displayCurrency),
       positive: marketPulse.finiNetFlow >= 0,
       icon: TrendingUp,
     },
@@ -48,9 +51,15 @@ export function MarketPulse() {
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 rounded-full bg-neon-green animate-pulse" />
           <span className="text-xs text-white/40 font-mono">LIVE</span>
-          <span className="text-[10px] text-white/20 font-mono">
+          <span className="text-[10px] text-white/20 font-mono" suppressHydrationWarning>
             {lastRefresh.toLocaleTimeString()}
           </span>
+          <DataSourceTooltip sources={[
+            { label: 'Stock Prices', source: 'live', detail: 'Real-time quotes from Financial Modeling Prep (FMP) API — prices, change, volume, market cap.' },
+            { label: 'Fear & Greed', source: 'partial', detail: 'Score is a simplified estimate. Sub-components (Branch, Flow, etc.) use random fill.' },
+            { label: 'Institutional Flow', source: 'mock', detail: 'FINI net flow data is not available on the free FMP tier.' },
+            { label: 'Advancers/Decliners', source: 'partial', detail: 'Estimated — real NYSE/NASDAQ advance-decline data requires a paid exchange feed.' },
+          ]} />
         </div>
         <button
           onClick={refreshData}

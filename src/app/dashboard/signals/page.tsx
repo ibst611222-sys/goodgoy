@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import { useAppStore } from '@/store/use-app-store'
 import { SignalCard } from '@/components/dashboard/SignalCard'
+import { DataSourceTooltip } from '@/components/ui/DataSourceTooltip'
 import { Grid3X3, List, Filter } from 'lucide-react'
 
 const sectors = ['All', 'Technology', 'Healthcare', 'Financial', 'Energy', 'Automotive', 'Consumer Defensive']
@@ -46,6 +47,9 @@ export default function SignalsPage() {
           <h1 className="text-lg font-bold text-white">Signals</h1>
           <p className="text-xs text-white/30 font-mono">{filtered.length} active signals</p>
         </div>
+        <DataSourceTooltip sources={[
+          { label: 'Signals', source: 'derived', detail: 'Z-scores, edge scores, and buying intensity calculated from real FMP stock quotes. Some fields (thirtyDayNet, finiFlow) are estimated.' },
+        ]} />
       </div>
 
       {/* Filter tabs */}

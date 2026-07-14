@@ -4,13 +4,15 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { cn, formatCurrency, formatPercent, formatCompactCurrency, formatLargeNumber } from '@/lib/utils'
 import { useAppStore } from '@/store/use-app-store'
+import { convertCurrency } from '@/lib/exchange-rates'
 import { financialHighlights } from '@/data/mock-data'
 import { X, TrendingUp, TrendingDown, BarChart3, FileText, Network, Calendar, BrainCircuit } from 'lucide-react'
+import { CandlestickChart } from './CandlestickChart'
 
 const tabs = ['Overview', 'Charts', 'HF Analysis', 'Financials', 'Supply Chain', 'Earnings']
 
 export function StockDetailPanel() {
-  const { selectedSymbol, setSelectedSymbol } = useAppStore()
+  const { selectedSymbol, setSelectedSymbol, displayCurrency, exchangeRates } = useAppStore()
   const [activeTab, setActiveTab] = useState('Overview')
 
   if (!selectedSymbol) return null
@@ -18,15 +20,15 @@ export function StockDetailPanel() {
   const fin = financialHighlights[selectedSymbol]
 
   const stats = fin ? [
-    { label: 'Market Cap', value: formatCompactCurrency(fin.marketCap) },
+    { label: 'Market Cap', value: formatCompactCurrency(convertCurrency(fin.marketCap, displayCurrency, exchangeRates), displayCurrency) },
     { label: 'P/E', value: fin.pe.toFixed(1) },
     { label: 'Forward P/E', value: fin.forwardPE.toFixed(1) },
     { label: 'P/B', value: fin.pb.toFixed(1) },
     { label: 'Beta', value: fin.beta.toFixed(2) },
     { label: 'Dividend Yield', value: `${fin.dividendYield.toFixed(2)}%` },
     { label: 'ROE', value: `${fin.roe.toFixed(1)}%` },
-    { label: '52W High', value: formatCurrency(fin.fiftyTwoWeekHigh) },
-    { label: '52W Low', value: formatCurrency(fin.fiftyTwoWeekLow) },
+    { label: '52W High', value: formatCurrency(convertCurrency(fin.fiftyTwoWeekHigh, displayCurrency, exchangeRates), displayCurrency) },
+    { label: '52W Low', value: formatCurrency(convertCurrency(fin.fiftyTwoWeekLow, displayCurrency, exchangeRates), displayCurrency) },
     { label: 'Avg Volume', value: formatLargeNumber(fin.avgVolume) },
     { label: 'Short % Float', value: `${fin.shortPercentFloat.toFixed(1)}%` },
     { label: 'Revenue Growth', value: `${fin.revenueGrowth.toFixed(1)}%` },
@@ -81,10 +83,16 @@ export function StockDetailPanel() {
             <div className="space-y-4">
               {/* Price */}
               <div className="glass rounded-xl p-4 border border-surface-border/30">
-                <div className="text-3xl font-bold text-white">{formatCurrency(fin?.marketCap ? 880.15 : 0)}</div>
+                <div className="text-3xl font-bold text-white">{formatCurrency(convertCurrency(fin?.marketCap ? 880.15 : 0, displayCurrency, exchangeRates), displayCurrency)}</div>
                 <div className="flex items-center gap-2 mt-1">
                   <span className="text-sm text-neon-green font-mono">+2.30 (1.17%)</span>
                   <span className="text-[10px] text-white/30">Today</span>
+                </div>
+                {/* VWAP stat */}
+                <div className="flex items-center gap-2 mt-2 pt-2 border-t border-surface-border/20">
+                  <span className="text-[9px] text-white/30 font-mono">VWAP</span>
+                  <span className="text-[10px] font-mono text-neon-purple">{formatCurrency(convertCurrency(880.15 * 1.001, displayCurrency, exchangeRates), displayCurrency)}</span>
+                  <span className="text-[8px] font-mono text-neon-green">+0.1%</span>
                 </div>
               </div>
 
@@ -136,13 +144,10 @@ export function StockDetailPanel() {
           )}
 
           {activeTab === 'Charts' && (
-            <div className="glass rounded-xl p-8 border border-surface-border/30 flex items-center justify-center">
-              <div className="text-center">
-                <BarChart3 className="w-8 h-8 text-white/20 mx-auto mb-2" />
-                <div className="text-xs text-white/30 font-mono">Candlestick chart + Volume + Institutional flow</div>
-                <div className="text-[10px] text-white/20 mt-1">Interactive chart loading...</div>
-              </div>
-            </div>
+            <CandlestickChart
+              symbol={selectedSymbol}
+              basePrice={fin?.marketCap ? 880.15 : 200}
+            />
           )}
 
           {activeTab === 'HF Analysis' && (

@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion'
 import { cn, timeAgo } from '@/lib/utils'
 import { useAppStore } from '@/store/use-app-store'
+import { DataSourceTooltip } from '@/components/ui/DataSourceTooltip'
 import { Newspaper, ExternalLink } from 'lucide-react'
 
 const sourceColors: Record<string, string> = {
@@ -17,9 +18,14 @@ export default function NewsPage() {
 
   return (
     <div className="space-y-4">
-      <div>
-        <h1 className="text-lg font-bold text-white">News & Announcements</h1>
-        <p className="text-xs text-white/30 font-mono">Market-moving news, earnings releases, and regulatory filings</p>
+      <div className="flex items-start justify-between">
+        <div>
+          <h1 className="text-lg font-bold text-white">News & Announcements</h1>
+          <p className="text-xs text-white/30 font-mono">Market-moving news, earnings releases, and regulatory filings</p>
+        </div>
+        <DataSourceTooltip sources={[
+          { label: 'News Feed', source: 'live', detail: 'Real headlines from Yahoo Finance, MarketWatch, and SeekingAlpha RSS feeds. Filtered to only show articles mentioning tracked stocks.' },
+        ]} />
       </div>
 
       <div className="space-y-2">

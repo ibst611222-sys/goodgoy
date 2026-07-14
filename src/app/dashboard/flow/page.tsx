@@ -3,22 +3,29 @@
 import { useAppStore } from '@/store/use-app-store'
 import { formatCompactCurrency } from '@/lib/utils'
 import { cn } from '@/lib/utils'
+import { DataSourceTooltip } from '@/components/ui/DataSourceTooltip'
 import { motion } from 'framer-motion'
 
 export default function FlowPage() {
-  const { sectorFlows } = useAppStore()
+  const { sectorFlows, displayCurrency } = useAppStore()
 
   return (
     <div className="space-y-4">
-      <div>
-        <h1 className="text-lg font-bold text-white">Flow</h1>
-        <p className="text-xs text-white/30 font-mono">Sector & stock-level money flow</p>
+      <div className="flex items-start justify-between">
+        <div>
+          <h1 className="text-lg font-bold text-white">Flow</h1>
+          <p className="text-xs text-white/30 font-mono">Sector & stock-level money flow</p>
+        </div>
+        <DataSourceTooltip sources={[
+          { label: 'Sector Flows', source: 'derived', detail: 'Calculated from real FMP stock quotes — inflow/outflow based on market-cap-weighted price changes of tracked stocks.' },
+        ]} />
       </div>
 
       {/* Sector Flow Table */}
       <div className="glass rounded-xl border border-surface-border/50 overflow-hidden">
-        <div className="p-3 border-b border-surface-border/30">
+        <div className="p-3 border-b border-surface-border/30 flex items-center justify-between">
           <span className="text-xs text-white/40 font-mono">Sector Flow — 7-Day Capital Velocity</span>
+          <span className="text-[8px] font-mono text-neon-cyan/50 bg-neon-cyan/5 px-1.5 py-0.5 rounded border border-neon-cyan/10">DERIVED FROM FMP</span>
         </div>
         <div className="divide-y divide-surface-border/20">
           {sectorFlows.map((sf, i) => (
@@ -33,16 +40,16 @@ export default function FlowPage() {
               <div className="flex-1 grid grid-cols-4 gap-4 text-xs font-mono">
                 <div>
                   <div className="text-[9px] text-white/20">Inflow</div>
-                  <div className="text-neon-green">{formatCompactCurrency(sf.inflow)}</div>
+                  <div className="text-neon-green">{formatCompactCurrency(sf.inflow, displayCurrency)}</div>
                 </div>
                 <div>
                   <div className="text-[9px] text-white/20">Outflow</div>
-                  <div className="text-neon-pink">{formatCompactCurrency(sf.outflow)}</div>
+                  <div className="text-neon-pink">{formatCompactCurrency(sf.outflow, displayCurrency)}</div>
                 </div>
                 <div>
                   <div className="text-[9px] text-white/20">Net</div>
                   <div className={sf.inflow > sf.outflow ? 'text-neon-green' : 'text-neon-pink'}>
-                    {formatCompactCurrency(sf.inflow - sf.outflow)}
+                    {formatCompactCurrency(sf.inflow - sf.outflow, displayCurrency)}
                   </div>
                 </div>
                 <div>

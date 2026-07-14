@@ -3,6 +3,8 @@
 import { motion } from 'framer-motion'
 import { cn, formatCurrency, formatCompactCurrency, timeAgo } from '@/lib/utils'
 import { useAppStore } from '@/store/use-app-store'
+import { convertCurrency } from '@/lib/exchange-rates'
+import { DataSourceTooltip } from '@/components/ui/DataSourceTooltip'
 
 const urgencyColors = {
   high: 'text-neon-pink bg-neon-pink/10 border-neon-pink/20',
@@ -18,13 +20,18 @@ const typeLabels: Record<string, string> = {
 }
 
 export default function InsiderPage() {
-  const { insiderTransactions } = useAppStore()
+  const { insiderTransactions, displayCurrency, exchangeRates } = useAppStore()
 
   return (
     <div className="space-y-4">
-      <div>
-        <h1 className="text-lg font-bold text-white">Insider Tracker</h1>
-        <p className="text-xs text-white/30 font-mono">Director transactions, pledge risks, management changes</p>
+      <div className="flex items-start justify-between">
+        <div>
+          <h1 className="text-lg font-bold text-white">Insider Tracker</h1>
+          <p className="text-xs text-white/30 font-mono">Director transactions, pledge risks, management changes</p>
+        </div>
+        <DataSourceTooltip sources={[
+          { label: 'Insider Trades', source: 'partial', detail: 'Filing dates & form types from real SEC EDGAR data. Insider names and share amounts are algorithmically enriched from filing metadata.' },
+        ]} />
       </div>
 
       <div className="glass rounded-xl border border-surface-border/50 overflow-hidden">
@@ -66,7 +73,7 @@ export default function InsiderPage() {
                 </div>
                 <div>
                   <div className="text-white/20">Value</div>
-                  <div className="text-white/80">{formatCompactCurrency(tx.value)}</div>
+                  <div className="text-white/80">{formatCompactCurrency(convertCurrency(tx.value, displayCurrency, exchangeRates), displayCurrency)}</div>
                 </div>
               </div>
               <div className="text-[9px] text-white/30 font-mono w-16 text-right">{tx.date}</div>

@@ -2,6 +2,8 @@
 
 import { motion } from 'framer-motion'
 import { cn, formatCompactCurrency, formatPercent } from '@/lib/utils'
+import { useAppStore } from '@/store/use-app-store'
+import { convertCurrency } from '@/lib/exchange-rates'
 
 const sectors = [
   { name: 'Technology', change: 1.2, marketCap: 12500000000000, color: '#00ff88' },
@@ -17,6 +19,7 @@ const sectors = [
 ]
 
 export function MarketHeatmap() {
+  const { displayCurrency, exchangeRates } = useAppStore()
   return (
     <div className="glass rounded-xl p-4 border border-surface-border/50">
       <div className="text-xs text-white/40 font-mono mb-3">Market Heatmap</div>
@@ -45,7 +48,7 @@ export function MarketHeatmap() {
                 {formatPercent(sector.change)}
               </div>
               <div className="text-[9px] text-white/30 mt-0.5 font-mono">
-                {formatCompactCurrency(sector.marketCap)}
+                {formatCompactCurrency(convertCurrency(sector.marketCap, displayCurrency, exchangeRates), displayCurrency)}
               </div>
             </motion.div>
           )

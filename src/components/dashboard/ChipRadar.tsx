@@ -3,13 +3,20 @@
 import { motion } from 'framer-motion'
 import { useAppStore } from '@/store/use-app-store'
 import { cn, formatCurrency, formatPercent } from '@/lib/utils'
+import { convertCurrency } from '@/lib/exchange-rates'
 import { TrendingUp, TrendingDown } from 'lucide-react'
 
 export function ChipRadar() {
-  const { signals, setSelectedSymbol } = useAppStore()
+  const { signals, setSelectedSymbol, displayCurrency, exchangeRates } = useAppStore()
 
   // Top 9 by edge score
   const top9 = [...signals].sort((a, b) => b.edgeScore - a.edgeScore).slice(0, 9)
+
+  // Convert prices to user's selected currency
+  const withConvertedPrices = top9.map(s => ({
+    ...s,
+    _price: convertCurrency(s.price, displayCurrency, exchangeRates),
+  }))
 
   return (
     <div className="glass rounded-xl p-4 border border-surface-border/50">
@@ -24,7 +31,7 @@ export function ChipRadar() {
       </div>
 
       <div className="grid grid-cols-3 gap-2">
-        {top9.map((signal, i) => (
+        {withConvertedPrices.map((signal, i) => (
           <motion.div
             key={signal.id}
             initial={{ opacity: 0, scale: 0.9 }}
@@ -43,7 +50,7 @@ export function ChipRadar() {
               <span className="text-[10px] text-neon-cyan font-mono">#{i + 1}</span>
             </div>
             <div className="flex items-center gap-2 text-[10px] font-mono">
-              <span className="text-white/60">{formatCurrency(signal.price)}</span>
+              <span className="text-white/60">{formatCurrency(signal._price, displayCurrency)}</span>
               <span className={signal.changePercent >= 0 ? 'text-neon-green' : 'text-neon-pink'}>
                 {formatPercent(signal.changePercent)}
               </span>

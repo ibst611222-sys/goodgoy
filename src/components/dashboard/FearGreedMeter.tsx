@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { useAppStore } from '@/store/use-app-store'
+import { DataSourceTooltip } from '@/components/ui/DataSourceTooltip'
 
 export function FearGreedMeter() {
   const { marketPulse } = useAppStore()
@@ -31,7 +32,12 @@ export function FearGreedMeter() {
 
   return (
     <div className="glass rounded-xl p-4 border border-surface-border/50 relative overflow-hidden">
-      <div className="text-xs text-white/40 font-mono mb-3">Fear & Greed Index</div>
+      <div className="flex items-center gap-2 mb-3">
+        <span className="text-xs text-white/40 font-mono">Fear & Greed Index</span>
+        <DataSourceTooltip sources={[
+          { label: 'Fear & Greed', source: 'partial', detail: 'Score is a simplified estimate (derived from SPY momentum). The sub-component bars (Branch, Flow, Squeeze, News, Trend) are placeholder fills.' },
+        ]} />
+      </div>
 
       <div className="flex items-center gap-6">
         {/* 3D Orb */}
