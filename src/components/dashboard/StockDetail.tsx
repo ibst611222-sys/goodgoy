@@ -8,6 +8,7 @@ import { convertCurrency } from '@/lib/exchange-rates'
 import { financialHighlights } from '@/data/mock-data'
 import { X, TrendingUp, TrendingDown, BarChart3, FileText, Network, Calendar, BrainCircuit } from 'lucide-react'
 import { CandlestickChart } from './CandlestickChart'
+import { StockChat } from './StockChat'
 
 const tabs = ['Overview', 'Charts', 'HF Analysis', 'Financials', 'Supply Chain', 'Earnings']
 
@@ -216,6 +217,9 @@ export function StockDetailPanel() {
             </div>
           )}
         </div>
+
+        {/* AI Chat */}
+        <StockChat />
       </div>
     </motion.div>
   )

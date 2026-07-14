@@ -7,6 +7,8 @@ import { TopBar } from '@/components/dashboard/TopBar'
 import { StockDetailPanel } from '@/components/dashboard/StockDetail'
 import { DataHydrator } from '@/components/DataHydrator'
 import { PriceTicker } from '@/components/dashboard/PriceTicker'
+import { EnhancedParticles } from '@/components/three/EnhancedParticles'
+import { FloatingShapes } from '@/components/three/FloatingShapes'
 import { motion, AnimatePresence } from 'framer-motion'
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -14,8 +16,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const pathname = usePathname()
 
   return (
-    <div className="min-h-screen bg-surface-dark bg-warm-glow">
+    <div className="min-h-screen bg-surface-dark bg-warm-glow relative">
       <DataHydrator />
+      <EnhancedParticles />
+      <FloatingShapes />
       <Sidebar />
       <div
         className="transition-all duration-300"

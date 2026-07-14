@@ -21,7 +21,13 @@ export function DataHydrator() {
     setSectorFlows,
     setInsiderTransactions,
     setNews,
+    refreshInterval,
+    refreshData,
   } = useAppStore()
+
+  // Use a ref so the interval callback always gets the latest interval value
+  const intervalRef = useRef(refreshInterval)
+  intervalRef.current = refreshInterval
 
   useEffect(() => {
     mountedRef.current = true
@@ -52,6 +58,7 @@ export function DataHydrator() {
         setSectorFlows(result.data.sectorFlows)
         setInsiderTransactions(result.data.insiderTransactions)
         setNews(result.data.news)
+        refreshData()
         setStatus('live')
 
         badgeTimerRef.current = setTimeout(() => {
@@ -64,15 +71,15 @@ export function DataHydrator() {
 
     load()
 
-    // Refresh data every 10 minutes (with built-in timeouts per source)
-    const interval = setInterval(load, 10 * 60 * 1000)
+    // Refresh at the interval set by the user (default 10 min, min 30s)
+    const interval = setInterval(load, intervalRef.current * 1000)
 
     return () => {
       mountedRef.current = false
       clearInterval(interval)
       if (badgeTimerRef.current) clearTimeout(badgeTimerRef.current)
     }
-  }, [])
+  }, [refreshInterval])
 
   return (
     <>

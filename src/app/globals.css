@@ -121,6 +121,64 @@
   .animate-in-delay-4 {
     animation-delay: 0.4s;
   }
+
+  /* 3D perspective for cards */
+  .perspective-card {
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+  }
+
+  .perspective-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(
+      135deg,
+      rgba(200, 164, 92, 0.05) 0%,
+      transparent 50%,
+      rgba(200, 164, 92, 0.02) 100%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+
+  .perspective-card:hover::after {
+    opacity: 1;
+  }
+
+  /* Glow ring animation */
+  @keyframes glow-pulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(200, 164, 92, 0.05); }
+    50% { box-shadow: 0 0 30px rgba(200, 164, 92, 0.15); }
+  }
+
+  .glow-pulse {
+    animation: glow-pulse 3s ease-in-out infinite;
+  }
+
+  /* Shimmer loading */
+  @keyframes shimmer-rotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  .shimmer-ring {
+    animation: shimmer-rotate 4s linear infinite;
+    background: conic-gradient(from 0deg, transparent, rgba(200, 164, 92, 0.1), transparent, rgba(200, 164, 92, 0.05), transparent);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes fadeInUp {

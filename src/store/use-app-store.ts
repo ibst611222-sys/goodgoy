@@ -57,14 +57,47 @@ interface AppState {
   addToWatchlist: (symbol: string) => void
   removeFromWatchlist: (symbol: string) => void
   isInWatchlist: (symbol: string) => boolean
+
+  // Auth
+  user: { email: string; id: string } | null
+  setUser: (user: { email: string; id: string } | null) => void
+  signOut: () => void
+
+  // Dashboard customization
+  hiddenWidgets: string[]
+  toggleWidget: (widgetId: string) => void
+  refreshInterval: number // seconds
+  setRefreshInterval: (seconds: number) => void
 }
 
 // Partial state that should be persisted to localStorage
-const PERSISTED_KEYS = ['displayCurrency', 'theme', 'watchlist'] as const
+const PERSISTED_KEYS = ['displayCurrency', 'theme', 'watchlist', 'hiddenWidgets', 'refreshInterval'] as const
 
 export const useAppStore = create<AppState>()(
   persist(
     (set, get) => ({
+      // Auth
+      user: null,
+      setUser: (user) => set({ user }),
+      signOut: () => {
+        set({ user: null })
+        // Try to sign out from Supabase if available
+        import('@/lib/supabase/client').then(({ createClient }) => {
+          const supabase = createClient()
+          supabase.auth.signOut()
+        }).catch(() => {})
+      },
+
+      // Dashboard customization
+      hiddenWidgets: [],
+      toggleWidget: (widgetId) => set((s) => ({
+        hiddenWidgets: s.hiddenWidgets.includes(widgetId)
+          ? s.hiddenWidgets.filter(w => w !== widgetId)
+          : [...s.hiddenWidgets, widgetId]
+      })),
+      refreshInterval: 600,
+      setRefreshInterval: (seconds) => set({ refreshInterval: seconds }),
+
       // Navigation
       activeTab: 'dashboard',
       setActiveTab: (tab) => set({ activeTab: tab }),

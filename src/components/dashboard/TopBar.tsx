@@ -2,7 +2,8 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { useAppStore } from '@/store/use-app-store'
-import { Search, Sun, Moon, User, Bell, LogOut, Settings, HelpCircle, CheckCircle, TrendingUp, Shield, AlertTriangle } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { Search, Sun, Moon, User, Bell, LogOut, Settings, HelpCircle, CheckCircle, TrendingUp, Shield, AlertTriangle, LogIn } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { CurrencySelector } from '@/components/ui/CurrencySelector'
 
@@ -26,7 +27,8 @@ function useClickOutside(ref: React.RefObject<HTMLElement | null>, handler: () =
 }
 
 export function TopBar() {
-  const { theme, toggleTheme, setSelectedSymbol, stocks, displayCurrency, exchangeRates } = useAppStore()
+  const { theme, toggleTheme, setSelectedSymbol, stocks, displayCurrency, exchangeRates, user, signOut } = useAppStore()
+  const router = useRouter()
   const [search, setSearch] = useState('')
   const [showResults, setShowResults] = useState(false)
   const [showNotifications, setShowNotifications] = useState(false)
@@ -230,10 +232,17 @@ export function TopBar() {
                   ))}
                 </div>
                 <div className="border-t border-surface-border/30 py-1">
-                  <button className="w-full flex items-center gap-2.5 px-3 py-2 hover:bg-white/5 transition-colors text-left">
-                    <LogOut className="w-3.5 h-3.5 text-white/30" />
-                    <span className="text-[10px] text-white/60">Sign In</span>
-                  </button>
+                  {user ? (
+                    <button onClick={() => { signOut(); setShowAccount(false) }} className="w-full flex items-center gap-2.5 px-3 py-2 hover:bg-white/5 transition-colors text-left">
+                      <LogOut className="w-3.5 h-3.5 text-white/30" />
+                      <span className="text-[10px] text-white/60">Sign Out</span>
+                    </button>
+                  ) : (
+                    <button onClick={() => { router.push('/login'); setShowAccount(false) }} className="w-full flex items-center gap-2.5 px-3 py-2 hover:bg-white/5 transition-colors text-left">
+                      <LogIn className="w-3.5 h-3.5 text-white/30" />
+                      <span className="text-[10px] text-white/60">Sign In</span>
+                    </button>
+                  )}
                 </div>
               </motion.div>
             )}

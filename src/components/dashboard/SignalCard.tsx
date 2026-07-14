@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { cn, formatPercent, formatCurrency, formatLargeNumber } from '@/lib/utils'
 import { useAppStore } from '@/store/use-app-store'
@@ -15,6 +15,8 @@ interface SignalCardProps {
 
 export function SignalCard({ signal, view = 'card' }: SignalCardProps) {
   const { addToWatchlist, removeFromWatchlist, isInWatchlist, setSelectedSymbol, displayCurrency, exchangeRates } = useAppStore()
+  const cardRef = useRef<HTMLDivElement>(null)
+  const [tilt, setTilt] = useState({ x: 0, y: 0 })
 
   // Convert price to user's selected currency
   const convertedPrice = convertCurrency(signal.price, displayCurrency, exchangeRates)
@@ -61,19 +63,38 @@ export function SignalCard({ signal, view = 'card' }: SignalCardProps) {
     )
   }
 
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!cardRef.current) return
+    const rect = cardRef.current.getBoundingClientRect()
+    const x = (e.clientX - rect.left) / rect.width - 0.5
+    const y = (e.clientY - rect.top) / rect.height - 0.5
+    setTilt({ x: y * -8, y: x * 8 })
+  }
+
+  const handleMouseLeave = () => {
+    setTilt({ x: 0, y: 0 })
+    setShowTooltip(false)
+  }
+
   return (
     <motion.div
+      ref={cardRef}
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -2 }}
+      whileHover={{ y: -4 }}
       onClick={() => setSelectedSymbol(signal.symbol)}
       className={cn(
-        'signal-card',
+        'signal-card perspective-card',
         signal.isGoldGlow && 'gold',
         'cursor-pointer'
       )}
+      style={{
+        transform: `perspective(600px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
+        transition: tilt.x === 0 && tilt.y === 0 ? 'transform 0.5s ease-out' : 'none',
+      }}
+      onMouseMove={handleMouseMove}
       onMouseEnter={() => setShowTooltip(true)}
-      onMouseLeave={() => setShowTooltip(false)}
+      onMouseLeave={handleMouseLeave}
     >
       {/* Gold streak indicator */}
       {signal.isGoldGlow && (
