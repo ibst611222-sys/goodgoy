@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 
 export default function LoginPage() {
@@ -9,47 +8,74 @@ export default function LoginPage() {
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [supabaseAvailable] = useState(
+    () => typeof process !== 'undefined' && !!process.env.NEXT_PUBLIC_SUPABASE_URL
+  )
   const router = useRouter()
-
-  const supabase = createClient()
 
   async function handleEmailSignIn(e: React.FormEvent) {
     e.preventDefault()
+    if (!supabaseAvailable) {
+      setError('Supabase not configured yet. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY to enable authentication.')
+      return
+    }
     setLoading(true)
     setError(null)
 
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
-    if (error) {
-      setError(error.message)
-    } else {
-      router.push('/dashboard')
-      router.refresh()
+    try {
+      const { createClient } = await import('@/lib/supabase/client')
+      const supabase = createClient()
+      const { error } = await supabase.auth.signInWithPassword({ email, password })
+      if (error) {
+        setError(error.message)
+      } else {
+        router.push('/dashboard')
+        router.refresh()
+      }
+    } catch (err) {
+      setError('Failed to sign in. Supabase may not be configured.')
     }
     setLoading(false)
   }
 
   async function handleGoogleSignIn() {
+    if (!supabaseAvailable) {
+      setError('Supabase not configured yet.')
+      return
+    }
     setLoading(true)
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: { redirectTo: `${window.location.origin}/auth/callback` },
-    })
-    if (error) setError(error.message)
+    try {
+      const { createClient } = await import('@/lib/supabase/client')
+      const supabase = createClient()
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: { redirectTo: `${window.location.origin}/auth/callback` },
+      })
+      if (error) setError(error.message)
+    } catch {
+      setError('Failed to sign in with Google.')
+    }
     setLoading(false)
   }
 
   async function handleSignUp() {
-    if (!email || !password) return
+    if (!email || !password || !supabaseAvailable) return
     setLoading(true)
     setError(null)
 
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
-    })
-    if (error) setError(error.message)
-    else setError('Check your email for the confirmation link!')
+    try {
+      const { createClient } = await import('@/lib/supabase/client')
+      const supabase = createClient()
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
+      })
+      if (error) setError(error.message)
+      else setError('Check your email for the confirmation link!')
+    } catch {
+      setError('Failed to sign up.')
+    }
     setLoading(false)
   }
 
@@ -61,7 +87,14 @@ export default function LoginPage() {
             <span className="text-black font-bold text-sm">G</span>
           </div>
           <h1 className="text-lg font-bold text-white">goodgoy</h1>
-          <p className="text-xs text-white/30 font-mono mt-0.5">Sign in to your account</p>
+          <p className="text-xs text-white/30 font-mono mt-0.5">
+            {supabaseAvailable ? 'Sign in to your account' : 'Supabase not connected'}
+          </p>
+          {!supabaseAvailable && (
+            <p className="text-[9px] text-neon-amber/60 font-mono mt-1">
+              Add Supabase env vars to enable auth
+            </p>
+          )}
         </div>
 
         <form onSubmit={handleEmailSignIn} className="space-y-3">
@@ -90,7 +123,7 @@ export default function LoginPage() {
 
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || !supabaseAvailable}
             className="w-full py-2 rounded-lg bg-gradient-to-r from-neon-cyan to-neon-purple text-black font-semibold text-xs font-mono hover:opacity-90 transition-opacity disabled:opacity-50"
           >
             {loading ? 'Signing in...' : 'Sign In'}
@@ -105,7 +138,7 @@ export default function LoginPage() {
 
         <button
           onClick={handleGoogleSignIn}
-          disabled={loading}
+          disabled={loading || !supabaseAvailable}
           className="w-full py-2 rounded-lg bg-surface-card border border-surface-border text-white/80 text-xs font-mono hover:bg-surface-elevated transition-colors disabled:opacity-50 mb-3"
         >
           Continue with Google
@@ -113,7 +146,7 @@ export default function LoginPage() {
 
         <button
           onClick={handleSignUp}
-          disabled={loading}
+          disabled={loading || !supabaseAvailable}
           className="w-full text-center text-[10px] text-white/30 font-mono hover:text-white/50 transition-colors"
         >
           Don't have an account? Sign up
