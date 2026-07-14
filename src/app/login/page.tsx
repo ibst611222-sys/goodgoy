@@ -80,18 +80,18 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-surface-dark flex items-center justify-center p-4">
+    <div className="min-h-screen bg-surface-dark bg-warm-glow flex items-center justify-center p-4">
       <div className="w-full max-w-sm glass rounded-xl p-6 border border-surface-border/50">
         <div className="text-center mb-6">
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-neon-cyan to-neon-purple flex items-center justify-center mx-auto mb-3">
-            <span className="text-black font-bold text-sm">G</span>
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-gesso-gold to-gesso-amber flex items-center justify-center mx-auto mb-3">
+            <span className="text-surface-dark font-semibold text-sm tracking-tight">g</span>
           </div>
-          <h1 className="text-lg font-bold text-white">goodgoy</h1>
-          <p className="text-xs text-white/30 font-mono mt-0.5">
-            {supabaseAvailable ? 'Sign in to your account' : 'Supabase not connected'}
+          <h1 className="text-lg font-semibold text-stone-100 tracking-tight">goodgoy</h1>
+          <p className="text-xs text-stone-500 font-mono mt-0.5">
+            {supabaseAvailable ? 'Sign in to your account' : 'Authentication not configured'}
           </p>
           {!supabaseAvailable && (
-            <p className="text-[9px] text-neon-amber/60 font-mono mt-1">
+            <p className="text-[9px] text-gesso-amber/60 font-mono mt-1">
               Add Supabase env vars to enable auth
             </p>
           )}
@@ -103,7 +103,7 @@ export default function LoginPage() {
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full bg-surface-card border border-surface-border rounded-lg px-3 py-2 text-xs font-mono text-white/80 focus:outline-none focus:border-cosmic-500/50"
+            className="w-full bg-surface-card border border-surface-border rounded-lg px-3 py-2 text-xs font-mono text-stone-200/80 focus:outline-none focus:border-gesso-gold/40"
             required
           />
           <input
@@ -111,12 +111,12 @@ export default function LoginPage() {
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full bg-surface-card border border-surface-border rounded-lg px-3 py-2 text-xs font-mono text-white/80 focus:outline-none focus:border-cosmic-500/50"
+            className="w-full bg-surface-card border border-surface-border rounded-lg px-3 py-2 text-xs font-mono text-stone-200/80 focus:outline-none focus:border-gesso-gold/40"
             required
           />
 
           {error && (
-            <div className="text-[10px] font-mono text-neon-pink bg-neon-pink/5 rounded-lg px-3 py-2 border border-neon-pink/10">
+            <div className="text-[10px] font-mono text-gesso-rose bg-gesso-rose/5 rounded-lg px-3 py-2 border border-gesso-rose/10">
               {error}
             </div>
           )}
@@ -124,7 +124,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading || !supabaseAvailable}
-            className="w-full py-2 rounded-lg bg-gradient-to-r from-neon-cyan to-neon-purple text-black font-semibold text-xs font-mono hover:opacity-90 transition-opacity disabled:opacity-50"
+            className="w-full py-2 rounded-lg bg-gradient-to-r from-gesso-gold to-gesso-amber text-surface-dark font-semibold text-xs font-mono hover:opacity-90 transition-opacity disabled:opacity-50"
           >
             {loading ? 'Signing in...' : 'Sign In'}
           </button>
@@ -132,14 +132,14 @@ export default function LoginPage() {
 
         <div className="flex items-center gap-2 my-4">
           <div className="flex-1 h-px bg-surface-border/30" />
-          <span className="text-[10px] text-white/20 font-mono">or</span>
+          <span className="text-[10px] text-stone-500 font-mono">or</span>
           <div className="flex-1 h-px bg-surface-border/30" />
         </div>
 
         <button
           onClick={handleGoogleSignIn}
           disabled={loading || !supabaseAvailable}
-          className="w-full py-2 rounded-lg bg-surface-card border border-surface-border text-white/80 text-xs font-mono hover:bg-surface-elevated transition-colors disabled:opacity-50 mb-3"
+          className="w-full py-2 rounded-lg bg-surface-card border border-surface-border text-stone-300 text-xs font-mono hover:bg-surface-elevated transition-colors disabled:opacity-50 mb-3"
         >
           Continue with Google
         </button>
@@ -147,7 +147,7 @@ export default function LoginPage() {
         <button
           onClick={handleSignUp}
           disabled={loading || !supabaseAvailable}
-          className="w-full text-center text-[10px] text-white/30 font-mono hover:text-white/50 transition-colors"
+          className="w-full text-center text-[10px] text-stone-500 font-mono hover:text-stone-300 transition-colors"
         >
           Don't have an account? Sign up
         </button>

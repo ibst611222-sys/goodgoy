@@ -51,9 +51,9 @@ export function TopBar() {
   }
 
   const notifIcons: Record<string, React.ReactNode> = {
-    signal: <TrendingUp className="w-3.5 h-3.5 text-neon-cyan" />,
-    alert: <AlertTriangle className="w-3.5 h-3.5 text-neon-amber" />,
-    trade: <Shield className="w-3.5 h-3.5 text-neon-purple" />,
+    signal: <TrendingUp className="w-3.5 h-3.5 text-gesso-gold" />,
+    alert: <AlertTriangle className="w-3.5 h-3.5 text-gesso-amber" />,
+    trade: <Shield className="w-3.5 h-3.5 text-gesso-taupe" />,
   }
 
   return (
@@ -68,7 +68,7 @@ export function TopBar() {
           onChange={(e) => { setSearch(e.target.value); setShowResults(true) }}
           onFocus={() => setShowResults(true)}
           onBlur={() => setTimeout(() => setShowResults(false), 200)}
-          className="w-full bg-surface-card border border-surface-border rounded-lg pl-9 pr-3 py-2 text-sm text-white/80 placeholder:text-white/20 focus:outline-none focus:border-cosmic-500/50 transition-colors"
+          className="w-full bg-surface-card border border-surface-border rounded-lg pl-9 pr-3 py-2 text-sm text-stone-200/80 placeholder:text-stone-500 focus:outline-none focus:border-gesso-gold/40 transition-colors"
         />
 
         <AnimatePresence>
@@ -94,7 +94,7 @@ export function TopBar() {
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="text-xs font-mono text-white/60">${convertCurrency(stock.price, displayCurrency, exchangeRates).toFixed(2)}</span>
-                      <span className={`text-xs font-mono ${stock.changePercent >= 0 ? 'text-neon-green' : 'text-neon-pink'}`}>
+                      <span className={`text-xs font-mono ${stock.changePercent >= 0 ? 'text-gesso-sage' : 'text-gesso-rose'}`}>
                         {stock.changePercent >= 0 ? '+' : ''}{stock.changePercent}%
                       </span>
                     </div>
@@ -119,7 +119,7 @@ export function TopBar() {
           >
             <Bell className="w-4 h-4 text-white/40" />
             {unreadCount > 0 && (
-              <span className="absolute top-1 right-1 w-4 h-4 rounded-full bg-neon-pink text-[8px] font-mono font-bold text-white flex items-center justify-center">
+              <span className="absolute top-1 right-1 w-4 h-4 rounded-full bg-gesso-rose text-[8px] font-mono font-bold text-white flex items-center justify-center">
                 {unreadCount}
               </span>
             )}
@@ -136,13 +136,13 @@ export function TopBar() {
               >
                 <div className="px-4 py-2.5 border-b border-surface-border/30 flex items-center justify-between">
                   <span className="text-xs font-mono text-white/60">Notifications</span>
-                  <span className="text-[9px] font-mono text-neon-cyan cursor-pointer hover:text-neon-cyan/80" onClick={markAllRead}>Mark all read</span>
+                  <span className="text-[9px] font-mono text-gesso-gold cursor-pointer hover:text-gesso-gold/80" onClick={markAllRead}>Mark all read</span>
                 </div>
                 <div className="max-h-72 overflow-y-auto divide-y divide-surface-border/10">
                   {notifications.map((n) => (
                     <div
                       key={n.id}
-                      className={`px-4 py-2.5 flex items-start gap-3 hover:bg-white/[0.02] transition-colors cursor-pointer ${!n.read ? 'bg-cosmic-600/5' : ''}`}
+                      className={`px-4 py-2.5 flex items-start gap-3 hover:bg-white/[0.02] transition-colors cursor-pointer ${!n.read ? 'bg-gesso-gold/[0.03]' : ''}`}
                     >
                       <div className="mt-0.5 shrink-0">
                         {notifIcons[n.type]}
@@ -154,7 +154,7 @@ export function TopBar() {
                         <div className="text-[9px] text-white/30 font-mono mt-0.5">{n.time}</div>
                       </div>
                       {!n.read && (
-                        <div className="w-1.5 h-1.5 rounded-full bg-neon-cyan shrink-0 mt-1.5" />
+                        <div className="w-1.5 h-1.5 rounded-full bg-gesso-gold shrink-0 mt-1.5" />
                       )}
                     </div>
                   ))}
@@ -190,7 +190,7 @@ export function TopBar() {
             onClick={() => setShowAccount(!showAccount)}
             className="flex items-center gap-2 px-2 py-1 rounded-lg hover:bg-white/5 transition-colors"
           >
-            <div className="w-7 h-7 rounded-full bg-gradient-to-br from-neon-cyan to-neon-purple flex items-center justify-center">
+            <div className="w-7 h-7 rounded-full bg-gradient-to-br from-gesso-gold to-gesso-amber flex items-center justify-center">
               <User className="w-3.5 h-3.5 text-white" />
             </div>
             <div className="text-xs text-white/40 font-mono hidden sm:block">Guest</div>
@@ -224,7 +224,7 @@ export function TopBar() {
                       <item.icon className="w-3.5 h-3.5 text-white/30" />
                       <span className="text-[10px] text-white/60 flex-1">{item.label}</span>
                       {item.shortcut && (
-                        <span className="text-[8px] font-mono text-neon-cyan bg-neon-cyan/10 px-1.5 py-0.5 rounded">{item.shortcut}</span>
+                        <span className="text-[8px] font-mono text-gesso-gold bg-gesso-gold/10 px-1.5 py-0.5 rounded">{item.shortcut}</span>
                       )}
                     </button>
                   ))}

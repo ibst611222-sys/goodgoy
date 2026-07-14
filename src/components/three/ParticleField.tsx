@@ -8,7 +8,7 @@ interface ParticleFieldProps {
   color?: string
 }
 
-export function ParticleField({ volatility = 0.3, density = 100, color = '#5b21f6' }: ParticleFieldProps) {
+export function ParticleField({ volatility = 0.3, density = 100, color = '#c8a45c' }: ParticleFieldProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {

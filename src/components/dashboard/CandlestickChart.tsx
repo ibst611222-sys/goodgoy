@@ -257,26 +257,26 @@ export function CandlestickChart({ symbol, basePrice, className, simulatedOnly }
         })}
 
         {/* Bollinger Bands fill */}
-        {showBollinger && bbFillPath && <path d={bbFillPath} fill="rgba(168,85,247,0.05)" />}
-        {showBollinger && bbUpperPath && <path d={bbUpperPath} fill="none" stroke="#a855f7" strokeWidth={0.5} opacity={0.3} />}
-        {showBollinger && bbLowerPath && <path d={bbLowerPath} fill="none" stroke="#a855f7" strokeWidth={0.5} opacity={0.3} />}
+        {showBollinger && bbFillPath && <path d={bbFillPath} fill="rgba(138,122,102,0.05)" />}
+        {showBollinger && bbUpperPath && <path d={bbUpperPath} fill="none" stroke="#8a7a66" strokeWidth={0.5} opacity={0.3} />}
+        {showBollinger && bbLowerPath && <path d={bbLowerPath} fill="none" stroke="#8a7a66" strokeWidth={0.5} opacity={0.3} />}
         {showBollinger && <text x={width - padding.right} y={padding.top + 8} textAnchor="end" className="text-[6px] fill-neon-purple/30 font-mono">BB(20,2)</text>}
 
         {/* SMA lines */}
         {showSMA20 && sma20Path && <path d={sma20Path} fill="none" stroke="#f59e0b" strokeWidth={1.2} opacity={0.6} />}
         {showSMA20 && <text x={width - padding.right} y={padding.top + 18} textAnchor="end" className="text-[6px] fill-neon-amber/40 font-mono">SMA20</text>}
-        {showSMA50 && sma50Path && <path d={sma50Path} fill="none" stroke="#a855f7" strokeWidth={1.2} opacity={0.6} strokeDasharray="4,3" />}
+        {showSMA50 && sma50Path && <path d={sma50Path} fill="none" stroke="#8a7a66" strokeWidth={1.2} opacity={0.6} strokeDasharray="4,3" />}
         {showSMA50 && <text x={width - padding.right} y={padding.top + 28} textAnchor="end" className="text-[6px] fill-neon-purple/40 font-mono">SMA50</text>}
 
         {/* VWAP line */}
-        {vwapPath && <path d={vwapPath} fill="none" stroke="#a855f7" strokeWidth={1} opacity={0.4} strokeDasharray="4,3" />}
+        {vwapPath && <path d={vwapPath} fill="none" stroke="#8a7a66" strokeWidth={1} opacity={0.4} strokeDasharray="4,3" />}
         <text x={width - padding.right} y={getY(vwapSlice[vwapSlice.length - 1]) - 4} textAnchor="end" className="text-[6px] fill-neon-purple/30 font-mono">VWAP</text>
 
         {/* Candlesticks */}
         {data.map((d, i) => {
           const x = getX(i)
           const isUp = d.close >= d.open
-          const color = isUp ? '#00ff88' : '#ff2d95'
+          const color = isUp ? '#7c9f6e' : '#d4586e'
           const bodyTop = getY(Math.max(d.open, d.close))
           const bodyBottom = getY(Math.min(d.open, d.close))
           const bodyHeight = Math.max(bodyBottom - bodyTop, 1)

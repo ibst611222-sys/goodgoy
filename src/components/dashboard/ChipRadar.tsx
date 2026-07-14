@@ -60,7 +60,7 @@ export function ChipRadar() {
             <div className="flex items-center gap-1.5 mt-1.5">
               <div className="flex-1 h-0.5 rounded-full bg-surface-border overflow-hidden">
                 <div
-                  className="h-full rounded-full bg-gradient-to-r from-neon-cyan to-neon-purple"
+                  className="h-full rounded-full bg-gradient-to-r from-gesso-gold to-gesso-amber"
                   style={{ width: `${signal.buyingIntensity}%` }}
                 />
               </div>

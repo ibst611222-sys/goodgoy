@@ -25,9 +25,9 @@ export function FearGreedMeter() {
   }
 
   const getGlowColor = () => {
-    if (score >= 60) return '#00ff88'
-    if (score >= 40) return '#f59e0b'
-    return '#ff2d95'
+    if (score >= 60) return '#7c9f6e'
+    if (score >= 40) return '#e8b84b'
+    return '#d4586e'
   }
 
   return (
@@ -99,7 +99,7 @@ export function FearGreedMeter() {
             <div className="text-[8px] text-white/30 font-mono">{comp}</div>
             <div className="h-1 rounded-full bg-surface-border mt-1 overflow-hidden">
               <div
-                className="h-full rounded-full bg-gradient-to-r from-neon-cyan to-neon-purple"
+                className="h-full rounded-full bg-gradient-to-r from-gesso-gold to-gesso-taupe"
                 style={{ width: `${40 + Math.random() * 50}%` }}
               />
             </div>

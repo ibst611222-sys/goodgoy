@@ -6,16 +6,16 @@ import { useAppStore } from '@/store/use-app-store'
 import { convertCurrency } from '@/lib/exchange-rates'
 
 const sectors = [
-  { name: 'Technology', change: 1.2, marketCap: 12500000000000, color: '#00ff88' },
-  { name: 'Healthcare', change: 0.8, marketCap: 5800000000000, color: '#00f0ff' },
-  { name: 'Financial', change: -0.3, marketCap: 7200000000000, color: '#ff2d95' },
-  { name: 'Energy', change: -1.5, marketCap: 3200000000000, color: '#ff2d95' },
-  { name: 'Consumer Cyclical', change: 0.5, marketCap: 4800000000000, color: '#00ff88' },
-  { name: 'Consumer Defensive', change: 0.2, marketCap: 3500000000000, color: '#a855f7' },
-  { name: 'Industrials', change: 0.1, marketCap: 4200000000000, color: '#a855f7' },
-  { name: 'Utilities', change: -0.8, marketCap: 1500000000000, color: '#ff2d95' },
-  { name: 'Real Estate', change: 0.4, marketCap: 1200000000000, color: '#00f0ff' },
-  { name: 'Basic Materials', change: -0.6, marketCap: 1800000000000, color: '#ff2d95' },
+  { name: 'Technology', change: 1.2, marketCap: 12500000000000, color: '#7c9f6e' },
+  { name: 'Healthcare', change: 0.8, marketCap: 5800000000000, color: '#c8a45c' },
+  { name: 'Financial', change: -0.3, marketCap: 7200000000000, color: '#d4586e' },
+  { name: 'Energy', change: -1.5, marketCap: 3200000000000, color: '#d4586e' },
+  { name: 'Consumer Cyclical', change: 0.5, marketCap: 4800000000000, color: '#7c9f6e' },
+  { name: 'Consumer Defensive', change: 0.2, marketCap: 3500000000000, color: '#8a7a66' },
+  { name: 'Industrials', change: 0.1, marketCap: 4200000000000, color: '#8a7a66' },
+  { name: 'Utilities', change: -0.8, marketCap: 1500000000000, color: '#d4586e' },
+  { name: 'Real Estate', change: 0.4, marketCap: 1200000000000, color: '#c8a45c' },
+  { name: 'Basic Materials', change: -0.6, marketCap: 1800000000000, color: '#d4586e' },
 ]
 
 export function MarketHeatmap() {

@@ -83,11 +83,11 @@ export function Sidebar() {
                 exit={{ opacity: 0 }}
                 className="flex items-center gap-2 flex-1"
               >
-                <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-neon-cyan to-neon-purple flex items-center justify-center">
-                  <span className="text-black font-bold text-xs">G</span>
+                <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-gesso-gold to-gesso-amber flex items-center justify-center">
+                  <span className="text-surface-dark font-bold text-xs tracking-tight">g</span>
                 </div>
-                <span className="font-bold text-white">goodgoy</span>
-                <span className="text-[10px] text-neon-cyan/60 font-mono ml-auto">v0.1</span>
+                <span className="font-semibold text-stone-100 tracking-tight">goodgoy</span>
+                <span className="text-[10px] text-gesso-gold/50 font-mono ml-auto">beta</span>
               </motion.div>
             ) : (
               <motion.div
@@ -97,8 +97,8 @@ export function Sidebar() {
                 exit={{ opacity: 0 }}
                 className="mx-auto"
               >
-                <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-neon-cyan to-neon-purple flex items-center justify-center">
-                  <span className="text-black font-bold text-xs">G</span>
+                <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-gesso-gold to-gesso-amber flex items-center justify-center">
+                  <span className="text-surface-dark font-bold text-xs tracking-tight">g</span>
                 </div>
               </motion.div>
             )}
@@ -126,14 +126,14 @@ export function Sidebar() {
                 className={cn(
                   'w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all duration-200 group relative overflow-hidden',
                   activeTab === item.id
-                    ? 'text-white bg-cosmic-600/20 border border-cosmic-500/30'
-                    : 'text-white/40 hover:text-white/70 hover:bg-white/5'
+                    ? 'text-stone-100 bg-gesso-gold/[0.06] border border-gesso-gold/20'
+                    : 'text-stone-500 hover:text-stone-300 hover:bg-white/[0.03]'
                 )}
               >
                 {activeTab === item.id && (
                   <motion.div
                     layoutId="nav-indicator"
-                    className="absolute left-0 w-0.5 h-full bg-gradient-to-b from-neon-cyan to-neon-purple rounded-r"
+                    className="absolute left-0 w-0.5 h-full bg-gradient-to-b from-gesso-gold to-gesso-amber rounded-r"
                   />
                 )}
                 <item.icon className="w-4 h-4 shrink-0" />

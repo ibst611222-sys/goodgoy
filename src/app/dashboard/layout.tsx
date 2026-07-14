@@ -6,7 +6,6 @@ import { Sidebar } from '@/components/dashboard/Sidebar'
 import { TopBar } from '@/components/dashboard/TopBar'
 import { StockDetailPanel } from '@/components/dashboard/StockDetail'
 import { DataHydrator } from '@/components/DataHydrator'
-import { ParticleField } from '@/components/three/ParticleField'
 import { PriceTicker } from '@/components/dashboard/PriceTicker'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -15,9 +14,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const pathname = usePathname()
 
   return (
-    <div className="min-h-screen bg-surface-dark">
+    <div className="min-h-screen bg-surface-dark bg-warm-glow">
       <DataHydrator />
-      <ParticleField volatility={0.2} density={80} />
       <Sidebar />
       <div
         className="transition-all duration-300"

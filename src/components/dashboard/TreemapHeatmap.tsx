@@ -15,16 +15,16 @@ interface TreemapItem {
 
 // Sector data with deterministic colors
 const sectors: TreemapItem[] = [
-  { name: 'Technology', value: 12500000000000, change: 1.2, color: '#00ff88' },
-  { name: 'Healthcare', value: 5800000000000, change: 0.8, color: '#00f0ff' },
-  { name: 'Financial', value: 7200000000000, change: -0.3, color: '#ff2d95' },
-  { name: 'Energy', value: 3200000000000, change: -1.5, color: '#ff2d95' },
-  { name: 'Consumer Cyclical', value: 4800000000000, change: 0.5, color: '#00ff88' },
-  { name: 'Consumer Defensive', value: 3500000000000, change: 0.2, color: '#a855f7' },
-  { name: 'Industrials', value: 4200000000000, change: 0.1, color: '#a855f7' },
-  { name: 'Utilities', value: 1500000000000, change: -0.8, color: '#ff2d95' },
-  { name: 'Real Estate', value: 1200000000000, change: 0.4, color: '#00f0ff' },
-  { name: 'Basic Materials', value: 1800000000000, change: -0.6, color: '#ff2d95' },
+  { name: 'Technology', value: 12500000000000, change: 1.2, color: '#7c9f6e' },
+  { name: 'Healthcare', value: 5800000000000, change: 0.8, color: '#c8a45c' },
+  { name: 'Financial', value: 7200000000000, change: -0.3, color: '#d4586e' },
+  { name: 'Energy', value: 3200000000000, change: -1.5, color: '#d4586e' },
+  { name: 'Consumer Cyclical', value: 4800000000000, change: 0.5, color: '#7c9f6e' },
+  { name: 'Consumer Defensive', value: 3500000000000, change: 0.2, color: '#8a7a66' },
+  { name: 'Industrials', value: 4200000000000, change: 0.1, color: '#8a7a66' },
+  { name: 'Utilities', value: 1500000000000, change: -0.8, color: '#d4586e' },
+  { name: 'Real Estate', value: 1200000000000, change: 0.4, color: '#c8a45c' },
+  { name: 'Basic Materials', value: 1800000000000, change: -0.6, color: '#d4586e' },
 ]
 
 interface TreemapRect {
@@ -122,7 +122,7 @@ export function TreemapHeatmap() {
                 width={r.w - padding * 2}
                 height={r.h - padding * 2}
                 rx={4}
-                fill={isPositive ? 'rgba(0,255,136,0.15)' : 'rgba(255,45,149,0.15)'}
+                fill={isPositive ? 'rgba(124,159,110,0.15)' : 'rgba(212,88,110,0.15)'}
                 stroke={isHovered ? 'rgba(255,255,255,0.4)' : `${r.item.color}33`}
                 strokeWidth={isHovered ? 1.5 : 1}
               />

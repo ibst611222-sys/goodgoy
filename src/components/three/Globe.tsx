@@ -19,9 +19,9 @@ export function Globe() {
     // Globe
     const geometry = new THREE.SphereGeometry(2.5, 64, 64)
     const material = new THREE.MeshPhongMaterial({
-      color: new THREE.Color('#1a1a3e'),
-      emissive: new THREE.Color('#2a0a4f'),
-      emissiveIntensity: 0.3,
+      color: new THREE.Color('#1e1b18'),
+      emissive: new THREE.Color('#3a2816'),
+      emissiveIntensity: 0.2,
       wireframe: false,
       transparent: true,
       opacity: 0.9,
@@ -32,18 +32,18 @@ export function Globe() {
     // Glow
     const glowGeometry = new THREE.SphereGeometry(2.6, 64, 64)
     const glowMaterial = new THREE.MeshBasicMaterial({
-      color: new THREE.Color('#5b21f6'),
+      color: new THREE.Color('#c8a45c'),
       transparent: true,
-      opacity: 0.1,
+      opacity: 0.08,
     })
     const glow = new THREE.Mesh(glowGeometry, glowMaterial)
     scene.add(glow)
 
     // Grid lines
     const gridMaterial = new THREE.LineBasicMaterial({
-      color: new THREE.Color('#5b21f6'),
+      color: new THREE.Color('#c8a45c'),
       transparent: true,
-      opacity: 0.15,
+      opacity: 0.1,
     })
     for (let i = 0; i <= 12; i++) {
       const lat = (i / 12) * Math.PI
@@ -77,7 +77,7 @@ export function Globe() {
     markerPositions.forEach((pos) => {
       const dotGeo = new THREE.SphereGeometry(0.04, 8, 8)
       const dotMat = new THREE.MeshBasicMaterial({
-        color: new THREE.Color('#00f0ff'),
+        color: new THREE.Color('#c8a45c'),
       })
       const dot = new THREE.Mesh(dotGeo, dotMat)
       const x = 2.55 * Math.sin(pos.lat) * Math.cos(pos.lng)
@@ -88,12 +88,12 @@ export function Globe() {
     })
 
     // Lights
-    const ambientLight = new THREE.AmbientLight(0x404060)
+    const ambientLight = new THREE.AmbientLight(0x403830)
     scene.add(ambientLight)
-    const dirLight = new THREE.DirectionalLight(0x8888ff, 1)
+    const dirLight = new THREE.DirectionalLight(0xffdd99, 0.8)
     dirLight.position.set(5, 3, 5)
     scene.add(dirLight)
-    const dirLight2 = new THREE.DirectionalLight(0xff4488, 0.3)
+    const dirLight2 = new THREE.DirectionalLight(0xc8a45c, 0.2)
     dirLight2.position.set(-3, -1, -5)
     scene.add(dirLight2)
 
@@ -114,7 +114,7 @@ export function Globe() {
     particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3))
     particleGeo.setAttribute('size', new THREE.BufferAttribute(sizes, 1))
     const particleMat = new THREE.PointsMaterial({
-      color: 0x8888ff,
+      color: 0xc8a45c,
       size: 0.04,
       transparent: true,
       opacity: 0.6,
@@ -124,9 +124,9 @@ export function Globe() {
 
     // Connection lines
     const connectionMaterial = new THREE.LineBasicMaterial({
-      color: new THREE.Color('#5b21f6'),
+      color: new THREE.Color('#c8a45c'),
       transparent: true,
-      opacity: 0.1,
+      opacity: 0.06,
     })
     for (let i = 0; i < 20; i++) {
       const idx1 = Math.floor(Math.random() * markerPositions.length)
